@@ -16,10 +16,30 @@ body {
     text-align: center;
     background: #3c91e6;
     border-radius: 10px;
-    margin: 4px;
-    padding: 10px 10px 10px 10px;
+    margin: 4px 4px 4px 4px;
+    font-size: 16px;
     color: #ffffff;
-    
+    height: 48px;
+    padding-top: 8px;
+}
+.answer:hover {
+    background: #155ca2;
+    font-size: 18px;
+    cursor: pointer;
+}
+.start { 
+    text-align: center;
+    background: #018e42;
+    border-radius: 10px;
+    margin: 4px 40px 4px 40px;
+    font-size: 24px;
+    color: #ffffff;
+    height: 48px;
+    padding-top: 8px;
+}
+.start:hover {
+    cursor: pointer;
+    background: #016530;
 }
 h2 {
     margin-top: -20px;
@@ -46,4 +66,10 @@ h1 {
 
 .mt-2 {
     margin-top: 20px;
+}
+.content {
+    display: none;
+}
+.ready {
+    display: block;
 }
