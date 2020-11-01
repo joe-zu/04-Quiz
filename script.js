@@ -1,6 +1,7 @@
 var background = $("body");
 var correct = $(".status");
 var scoreBoard = $(".score");
+var timeLeftDisplay = $(".time-left");
 
 var headers = [
     "Question 1",
@@ -22,8 +23,10 @@ var headers = [
     "Question 17",
     "Question 18",
     "Question 19",
-    "Question 20"
-]
+    "Question 20",
+    // 21 blank
+    " "
+];
 
 var questions = [
     // 1
@@ -65,8 +68,10 @@ var questions = [
     // 19
     "In this array, ['running', 'out', 'of', 'ideas'] What is the index of 'running'?", 
     // 20
-    "Who created Javascript?"
-]
+    "Who created Javascript?",
+    // 21 blank
+    " "
+];
 
 var answers = [
     // 1
@@ -108,8 +113,10 @@ var answers = [
     // 19
     ["1", "2", "0", "undefined"], 
     // 20
-    ["Brendan Eich", "Linus S. Java", "Mr.Script", "Twitter"]
-]
+    ["Brendan Eich", "Linus S. Java", "Mr.Script", "Twitter"],
+    // 21 blank
+    [" "]
+];
 
 var key = [
     // 1
@@ -143,7 +150,7 @@ var key = [
     // 15
     "camel case",
     // 16
-    "class='big",
+    "class='big'",
     // 17
     "ParseInt",
     // 18
@@ -151,32 +158,47 @@ var key = [
     // 19
     "0",
     // 20
-    "Brendan Eich"
-]
+    "Brendan Eich",
+    // 21 blank
+    " "
+];
 
-
+//Timer function
 var timer = $(".timer");
 let time = 60;
 function updateCountdown() {
     time--;
     timer.text("0:" + time);
-}
+    if(time <= 0) {
+        timer.text("0:00")
+        endGame();
+    }
+    
+};
+
 function showQuestion() {
     $(".content").show();
-}
+};
+// function showScore() {
+//     $(".score-form").show();
+// };
 function clearQuestion() {
     $(".choices").empty();
     $(".question").empty();
     $(".card-head").empty();
-}
-function clearStart () {
+    $(".question-hr").hide();
+};
+function clearStart() {
     $(".ready").hide();
-}
+};
+function showEnd() {
+   $(".leaderboard").show(); 
+};
 
-
-
+var startTime;
 var questionNum = 0;
-var userScore = 0;
+let userScore = 0;
+let finalScore;
 
 scoreBoard.text("score: " + userScore);
 
@@ -188,6 +210,8 @@ function displayQuestion() {
     questionHead.text(headers[questionNum]);
     questionHead.appendTo(".card-head");
 
+    $(".question-hr").show();
+
     var questionText = $("<h4>");
     questionText.text(questions[questionNum]);
     questionText.appendTo(".question");
@@ -197,64 +221,155 @@ function displayQuestion() {
     answerBtn.addClass("answer six columns");
     answerBtn.text(answers[questionNum][i])
     answerBtn.appendTo(".choices");
-    }
-}
+    };
+};
 function defaultColor() {
     //returns stat-bar to default color
     var bar = $(".status-bar")
     bar.css("background", "#ffffff");
     correct.empty();
-}   
+};   
 
 function correctColor() {
     //sets color to green for 1 second then back to default
     var bar = $(".status-bar")
     bar.css("background", "#018e42");
     setTimeout(defaultColor, 1000);
-}
+};
 function wrongColor() {
     //sets color to orange for 1 second then back to default
     var bar = $(".status-bar")
     bar.css("background", "#fa824c");
     setTimeout(defaultColor, 1000);
-}
+};
+
+
+
+
+
+function endGame() {
+    clearQuestion();
+    clearInterval(startTime);
+    timer.hide();
+    
+    scoreCard();
+};
+
+function scoreCard() {  
+    clearStart();
+    $(".score-form").show();
+    $("#username").show();
+    $("#save-username").show();
+
+    var timeLeftDisplay = $(".time-left");
+
+    var timeLeft = time;
+
+    timeLeftDisplay.text("time remaining: 0:" + timeLeft);
+
+    var finalScore = userScore + timeLeft; 
+
+    var scoreHead = $("#final-score");
+    scoreHead.text(finalScore);
+    scoreHead.appendTo("#final-score");
+};
+
+
+
+
+
+
+
+// START 
 
 $(".start").click(function() {
     clearStart();
     displayQuestion();
     showQuestion();
-    setInterval(updateCountdown, 1000);
-}) 
+    startTime = setInterval(updateCountdown, 1000);
+    
+});
 
+$(".choices").on("click", function (event) {
+    if (event.target.textContent == key[questionNum]) {
+        clearQuestion();
 
+        questionNum++;
+       
+        userScore++;
 
-$(".choices").on("click", function(event) {
-        if(event.target.textContent == key[questionNum]) {
-            clearQuestion();
-            
-            questionNum++;
-            userScore++;
-            
-            scoreBoard.text("score: " + userScore);
-            correct.text("Correct!");
-            correctColor();
+        scoreBoard.text("score: " + userScore);
+        correct.text("Correct!");
+        correctColor();
 
-            console.log("correct"); 
-            console.log(userScore);
-            
-
-            displayQuestion();
+        if(questionNum === 20) {
+            endGame();
         }
         else {
-            clearQuestion();
-
-            questionNum++;
-            //time --
-
-            
-            correct.text("Wrong!");
-            wrongColor();
-
             displayQuestion();
-         }
-    });
+        }
+    }
+    else {
+        clearQuestion();
+
+        questionNum++;
+        
+        
+        time = time - 5;
+
+
+        correct.text("Wrong!");
+        wrongColor();
+
+        
+        if(questionNum === 20) {
+            endGame();
+        }
+        else {
+            displayQuestion();
+        }
+    }
+});
+
+var userName = document.getElementById("username");
+var newScore = document.getElementById("final-score");
+const highScoresList = document.getElementById("high-scores-list");
+const maxHighScores = 5;
+
+const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+
+displayHighScores();
+
+$("#save-username").on("click", function (event) {
+    event.preventDefault();
+
+    const score = {
+        score: newScore.textContent,
+        name: userName.value
+    };
+    
+    highScores.push(score);
+    highScores.sort( (a,b) => b.score - a.score)
+    highScores.splice(5);
+
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+
+    $("#username").hide();
+    $("#save-username").hide();
+    displayHighScores();
+});
+
+console.log(highScores);
+    console.log(highScores[2])
+
+    function displayHighScores() {
+        $("#high-scores-list").empty();
+        for(i = 0; i < highScores.length; i++) {
+    var topFive = $("<li>");
+    topFive.addClass("list-item");
+    topFive.text(highScores[i].name + " " + highScores[i].score)
+    topFive.appendTo("#high-scores-list")
+}
+
+    }
+

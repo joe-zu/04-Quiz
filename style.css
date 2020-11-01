@@ -92,3 +92,7 @@ h1 {
 .ready {
     display: block;
 }
+.score-form {
+    display: none;
+
+}
