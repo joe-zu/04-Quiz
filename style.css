@@ -11,6 +11,25 @@ body {
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.03), 0 10px 10px rgba(0,0,0,0.03);;
+    height: 320px;
+}
+.status-bar {
+    background: #ffffff;
+    padding: 10px 20px 10px 20px;
+    border-radius: 10px;
+}
+.status {
+    color: black;
+    text-align: left;
+    font-style: italic;
+    font-size: 20px;
+    height: 2px;
+}
+.score {
+    color: black;
+    text-align: center;
+    font-style: italic;
+    font-size: 20px;
 }
 .answer {
     text-align: center;
@@ -31,7 +50,7 @@ body {
     text-align: center;
     background: #018e42;
     border-radius: 10px;
-    margin: 4px 40px 4px 40px;
+    margin: 120px 40px 4px 40px;
     font-size: 24px;
     color: #ffffff;
     height: 48px;
