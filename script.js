@@ -75,7 +75,7 @@ var questions = [
 
 var answers = [
     // 1
-    ["pomdoro timer", "meditation", "excersise", "all of the above"], 
+    ["pomodoro technique", "meditation", "excersise", "all of the above"], 
     // 2
     ["msg('Hello World');", "prompt('Hello World');", "<h1>Hello World</h1>", "alert('Hello World');"], 
     // 3
